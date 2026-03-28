@@ -860,10 +860,10 @@ rbl_check_rbls(struct AuthRequest *auth)
 		rbl_t *t = ptr->data;
 		int safamily = GET_SS_FAMILY(&auth->client->localClient->ip);
 
-		if(safamily == AF_INET6 && rbl_isv6(t) != true)
+		if(safamily == AF_INET6 && rbl_isv6(t) == false)
 			continue;
-		
-		if(safamily == AF_INET && rbl_isv4(t) != true)
+
+		if(safamily == AF_INET && rbl_isv4(t) == false)
 			continue;
 			
 		if(rbl_string((struct sockaddr *)&auth->client->localClient->ip, t->rblname, hostbuf, sizeof(hostbuf)) == NULL)
