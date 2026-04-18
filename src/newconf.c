@@ -941,10 +941,12 @@ conf_set_serverinfo_nicklen(confentry_t * entry, conf_t * conf, struct conf_item
 			conf_report_error_nl
 				("serverinfo::nicklen -- Nicklen cannot exceed %u(set to %u) - modify #define NICKLEN in include/ircd_defs.h to increase and recompile",
 				 NICKLEN - 1, nicklen);
+			nicklen = NICKLEN - 1;
 		}
 		else if(nicklen < 9)
 		{
 			conf_report_error_nl("serverinfo::nicklen -- Invalid nicklen %u, must be at least 9", nicklen);
+			nicklen = DEFAULT_NICKLEN;
 		}
 		ServerInfo.nicklen = nicklen + 1;
 	}
