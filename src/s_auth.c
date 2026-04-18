@@ -90,7 +90,7 @@ typedef struct _rblquery
         rb_dlink_node node;
         struct AuthRequest *auth;
         rbl_t *rbl;
-        uint16_t queryid;
+        uint32_t queryid;
 } rblquery_t;
 
 
