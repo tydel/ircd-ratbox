@@ -2441,8 +2441,15 @@ load_conf_settings(void)
 		splitmode = false;
 		splitchecking = false;
 	}
-	whowas_set_size(ConfigFileEntry.whowas_length);	
+	whowas_set_size(ConfigFileEntry.whowas_length);
 	check_class();
+
+	if(!ConfigFileEntry.map_oper_only && ConfigServerHide.flatten_links)
+	{
+		conf_report_warning_nl(
+			"map_oper_only = no is overridden by serverhide::flatten_links = yes "
+			"for users without the shide_exempt auth flag.");
+	}
 }
 
 
