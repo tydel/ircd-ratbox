@@ -70,5 +70,12 @@ void rbl_add_answer(rbl_t *t, const char *mask, const char *response);
 void rbl_add_other_answer(rbl_t *t, const char *answer);
 void rbl_set_match_other(rbl_t *t, bool other_reply);
 
+typedef void (*rbl_stats_cb)(const char *rblname,
+                             unsigned long queries,
+                             unsigned long matches,
+                             unsigned long misses,
+                             void *arg);
+void rbl_dump_stats(rbl_stats_cb cb, void *arg);
+
 
 #endif /* INCLUDED_s_auth_h */
