@@ -111,7 +111,9 @@ struct _rbl
 	rb_dlink_list answers;
 	int refcount;
 	uint8_t flags;
+	unsigned long queries;
 	unsigned long matches;
+	unsigned long misses;
 };
 
 typedef enum
@@ -789,6 +791,7 @@ rbl_dns_callback(const char *result, int status, int aftype, void *data)
 	struct Client *client;
 	struct in_addr in;
 	rb_dlink_node *ptr;
+	bool matched = false;
 
 	auth = query->auth;
 	client = auth->client;
@@ -812,12 +815,14 @@ rbl_dns_callback(const char *result, int status, int aftype, void *data)
 			if(c == val)
 			{
 				rbl_set_banned(auth, query->rbl->rblname, res->answer);
-				goto cleanup;	 
+				matched = true;
+				goto cleanup;
 			}
-		} 
+		}
 		if(match(mask, result) || match_ips(mask, result))
 		{
 			rbl_set_banned(auth, query->rbl->rblname, res->answer);
+			matched = true;
 			goto cleanup;
 		}
         }
@@ -825,18 +830,23 @@ rbl_dns_callback(const char *result, int status, int aftype, void *data)
 	if(rbl_ismatchother(query->rbl))
 	{
 		const char *reason = query->rbl->mo_answer;
-		
+
 		if(EmptyString(reason))
 			reason = "IP Address: ${ip} banned by RBL";
 		rbl_set_banned(auth, query->rbl->rblname, reason);
-	}	
+		matched = true;
+	}
 
 cleanup:
+	if(matched)
+		query->rbl->matches++;
+	else
+		query->rbl->misses++;
         rbl_detach_rbl_from_query(query);
 	rb_dlinkDelete(&query->node, &auth->rbl_queries);
         rb_free(query);
         rbl_release_auth(auth);
-        
+
 }
 
 #define RBL_HOSTLEN 255
@@ -873,6 +883,15 @@ rbl_check_rbls(struct AuthRequest *auth)
                 query->auth = auth;
                 rbl_attach_rbl_to_query(query, t);
                 rb_dlinkAdd(query, &query->node, &auth->rbl_queries);
+		/* Bump counter BEFORE lookup_hostname. lookup_hostname() can
+		 * synchronously fire rbl_dns_callback via failed_resolver()
+		 * when the resolver helper is unavailable; the callback
+		 * detaches the query which decrements t->refcount, and if the
+		 * zone was rbl_isfreeing() (e.g. a rehash removed it while an
+		 * earlier query still held a ref) reaching refcount==0 at that
+		 * point triggers rbl_destroy(t, false). A post-lookup t->queries
+		 * bump would then dereference freed memory. */
+		t->queries++;
 		query->queryid = lookup_hostname(hostbuf, AF_INET, rbl_dns_callback, query);
         }
 
@@ -904,6 +923,17 @@ rbl_clear_rbllists(void)
         	rbl_t *rbl = ptr->data;
         	rbl_destroy(rbl, true);
         }
+}
+
+void
+rbl_dump_stats(rbl_stats_cb cb, void *arg)
+{
+	rb_dlink_node *ptr;
+	RB_DLINK_FOREACH(ptr, rbl_lists.head)
+	{
+		rbl_t *t = ptr->data;
+		cb(t->rblname, t->queries, t->matches, t->misses, arg);
+	}
 }
 
 static void
