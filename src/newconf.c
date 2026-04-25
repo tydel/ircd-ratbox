@@ -2301,7 +2301,8 @@ conf_set_blacklist_aftype(confentry_t * entry, conf_t * conf, struct conf_items 
 		ipv4 = true;
 	}
 	else
-		conf_report_warning_nl("blacklist:aftype '%s' at %s:%d is unknown. assuming aftype = ipv4", aft, entry->filename, entry->line);
+		conf_report_warning_nl("%s:aftype '%s' at %s:%d is unknown. assuming aftype = ipv4",
+				       conf->confname, aft, entry->filename, entry->line);
 
 	rbl_set_aftype(t_rbl, ipv4, ipv6);
 }
@@ -2749,6 +2750,7 @@ static struct top_conf_table_t top_conf_table[] =
 	{ "connect",	conf_set_start_connect,	 conf_set_end_connect,	conf_connect_table,	1},
 	{ "shared",	conf_set_shared_cleanup, conf_set_shared_cleanup,conf_shared_table,	0},
 	{ "cluster",	conf_set_cluster_cleanup,conf_set_cluster_cleanup,conf_cluster_table,	0},
+	{ "blocklist",  conf_set_blacklist_start, conf_set_blacklist_end, conf_blacklist_table, 1},
 	{ "blacklist",  conf_set_blacklist_start, conf_set_blacklist_end, conf_blacklist_table, 1},
 #ifdef ENABLE_SERVICES
 	{ "service",	conf_set_service_start,	 NULL,			conf_service_table,	0},
