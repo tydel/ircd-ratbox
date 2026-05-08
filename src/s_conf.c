@@ -1230,8 +1230,6 @@ clear_out_old_conf(void)
 	free_null(ConfigFileEntry.fname_klinelog);
 	free_null(ConfigFileEntry.fname_operspylog);
 	free_null(ConfigFileEntry.fname_ioerrorlog);
-	free_null(ConfigFileEntry.motd_path);
-	free_null(ConfigFileEntry.oper_motd_path);
 	/* operator{} and class{} blocks are freed above */
 	/* clean out listeners */
 	close_listeners();
