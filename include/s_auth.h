@@ -77,5 +77,8 @@ typedef void (*rbl_stats_cb)(const char *rblname,
                              void *arg);
 void rbl_dump_stats(rbl_stats_cb cb, void *arg);
 
+struct sockaddr;
+void rbl_run_test(struct Client *source_p, const struct sockaddr *addr, const char *ipstr);
+
 
 #endif /* INCLUDED_s_auth_h */
