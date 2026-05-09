@@ -523,6 +523,10 @@ rb_setup_ssl_server(const char *cacert, const char *cert, const char *keyfile, c
 
 	SSL_CTX_set_options(sctx->ssl_ctx, tls_opts);
 
+#if !defined(LIBRESSL_VERSION_NUMBER) && OPENSSL_VERSION_NUMBER >= 0x10101000L
+	SSL_CTX_set_num_tickets(sctx->ssl_ctx, 0);
+#endif
+
 
 	if(ssl_cipher_list != NULL)
 		ciphers = ssl_cipher_list;
