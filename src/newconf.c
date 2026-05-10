@@ -2602,6 +2602,7 @@ static struct conf_items conf_general_table[] =
 	{ "tkline_expire_notices",	 CF_YESNO, NULL, 0, &ConfigFileEntry.tkline_expire_notices },
 
 	{ "anti_nick_flood",	CF_YESNO, NULL, 0, &ConfigFileEntry.anti_nick_flood	},
+	{ "anti_away_flood",	CF_YESNO, NULL, 0, &ConfigFileEntry.anti_away_flood	},
 	{ "burst_away",		CF_YESNO, NULL, 0, &ConfigFileEntry.burst_away		},
 	{ "caller_id_wait",	CF_TIME,  NULL, 0, &ConfigFileEntry.caller_id_wait	},
 	{ "client_exit",	CF_YESNO, NULL, 0, &ConfigFileEntry.client_exit		},
@@ -2625,6 +2626,8 @@ static struct conf_items conf_general_table[] =
 	{ "max_monitor",	CF_INT,	  NULL, 0, &ConfigFileEntry.max_monitor		},
 	{ "max_nick_time",	CF_TIME,  NULL, 0, &ConfigFileEntry.max_nick_time	},
 	{ "max_nick_changes",	CF_INT,	  NULL, 0, &ConfigFileEntry.max_nick_changes	},
+	{ "max_away_time",	CF_TIME,  NULL, 0, &ConfigFileEntry.max_away_time	},
+	{ "max_away_changes",	CF_INT,	  NULL, 0, &ConfigFileEntry.max_away_changes	},
 	{ "max_targets",	CF_INT,	  NULL, 0, &ConfigFileEntry.max_targets		},
 	{ "min_nonwildcard",	CF_INT,	  NULL, 0, &ConfigFileEntry.min_nonwildcard	},
 	{ "nick_delay",		CF_TIME,  NULL, 0, &ConfigFileEntry.nick_delay		},

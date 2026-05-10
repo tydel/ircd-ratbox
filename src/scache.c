@@ -40,11 +40,14 @@
 
 static size_t scache_allocated = 0;
 
-/* Return a pointer to the refcount word that precedes the interned string. */
+/* Return a pointer to the refcount word that precedes the interned string.
+ * The (uintptr_t) round-trip silences -Wcast-qual: the const-strip is
+ * deliberate (the refcount header is mutable; only the trailing name
+ * portion is exposed to callers as const). */
 static inline size_t *
 scache_refcount(const char *sc)
 {
-	return (size_t *)(sc - sizeof(size_t));
+	return (size_t *)(uintptr_t)(sc - sizeof(size_t));
 }
 
 const char *
