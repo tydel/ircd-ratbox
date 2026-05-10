@@ -741,7 +741,7 @@ set_default_conf(void)
 	ConfigFileEntry.default_adminstring = rb_strdup("is a Server Administrator");
 
 	ConfigFileEntry.failed_oper_notice = YES;
-	ConfigFileEntry.anti_nick_flood = NO;
+	ConfigFileEntry.anti_nick_flood = YES;
 	ConfigFileEntry.disable_fake_channels = NO;
 	ConfigFileEntry.max_nick_time = 20;
 	ConfigFileEntry.max_nick_changes = 5;
