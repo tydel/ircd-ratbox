@@ -742,9 +742,12 @@ set_default_conf(void)
 
 	ConfigFileEntry.failed_oper_notice = YES;
 	ConfigFileEntry.anti_nick_flood = NO;
+	ConfigFileEntry.anti_away_flood = YES;
 	ConfigFileEntry.disable_fake_channels = NO;
 	ConfigFileEntry.max_nick_time = 20;
 	ConfigFileEntry.max_nick_changes = 5;
+	ConfigFileEntry.max_away_time = 30;
+	ConfigFileEntry.max_away_changes = 4;
 	ConfigFileEntry.max_accept = 20;
 	ConfigFileEntry.max_monitor = 60;
 	ConfigFileEntry.nick_delay = 900;	/* 15 minutes */
